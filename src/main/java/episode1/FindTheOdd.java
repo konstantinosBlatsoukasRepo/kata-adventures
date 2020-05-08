@@ -21,7 +21,26 @@ import java.util.Map.Entry;
 public class FindTheOdd {
  
     public int solve(int[] input) {
+        Map<Integer, Integer> integersFrequencies = getIntegersFrequencies(input);
+        
+        return getTheIntegerWithOddFrequency(integersFrequencies);
+    }
 
+    private int getTheIntegerWithOddFrequency(Map<Integer, Integer> integersFrequencies) {
+        for (Entry<Integer, Integer> entry : integersFrequencies.entrySet()) {
+            int currentFrequency = entry.getValue();
+            if (isOdd(currentFrequency)) {
+                return entry.getKey();
+            }
+        }      
+        return 0;
+    }
+
+    private boolean isOdd(int number) {
+        return number % 2 != 0;
+    }
+
+    private Map<Integer, Integer> getIntegersFrequencies(int[] input) {
         Map<Integer, Integer> integersFrequencies = new HashMap<>();
         for (int i = 0; i < input.length; i++) {
             int currentValue = input[i];
@@ -34,14 +53,6 @@ public class FindTheOdd {
                 integersFrequencies.put(currentValue, 1);
             }
         }
-        
-        for (Entry<Integer, Integer> entry : integersFrequencies.entrySet()) {
-            int currentFrequency = entry.getValue();
-            if (currentFrequency % 2 != 0) {
-                return entry.getKey();
-            }
-        }      
-
-        return 0;
+        return integersFrequencies;
     } 
 } 
