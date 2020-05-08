@@ -14,13 +14,10 @@ Input: an array of ints
 Output: an int
 */
 
-public class FindTheOdd {
+import java.util.Arrays;
 
+public class FindTheOdd {
     public int solve(int[] input) {
-        int result = 0;
-        for (int i = 0; i < input.length; i++) {
-            result ^= input[i];
-        }
-        return result;
+        return Arrays.stream(input).reduce(0, (x, y) -> x ^ y);
     }
 }
