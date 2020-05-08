@@ -15,25 +15,27 @@ Output: an int
 */
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class FindTheOdd {
- 
+
     public int solve(int[] input) {
         Map<Integer, Integer> integersFrequencies = getIntegersFrequencies(input);
-        
+
         return getTheIntegerWithOddFrequency(integersFrequencies);
     }
 
     private int getTheIntegerWithOddFrequency(Map<Integer, Integer> integersFrequencies) {
-        for (Entry<Integer, Integer> entry : integersFrequencies.entrySet()) {
-            int currentFrequency = entry.getValue();
-            if (isOdd(currentFrequency)) {
-                return entry.getKey();
-            }
-        }      
-        return 0;
+        List<Entry<Integer, Integer>> integerWithOddFrequencies = integersFrequencies.entrySet()
+            .stream()
+            .filter(v -> isOdd(v.getValue()))
+            .collect(Collectors.toList());
+
+        return integerWithOddFrequencies.get(0).getKey();
     }
 
     private boolean isOdd(int number) {
@@ -46,13 +48,11 @@ public class FindTheOdd {
             int currentValue = input[i];
 
             if (integersFrequencies.containsKey(currentValue)) {
-                int oldFrequency = integersFrequencies.get(currentValue);
-                int newFrequency = oldFrequency + 1;
-                integersFrequencies.put(currentValue, newFrequency);
+                integersFrequencies.computeIfPresent(currentValue, (k, v) -> v + 1);
             } else {
-                integersFrequencies.put(currentValue, 1);
+                integersFrequencies.computeIfAbsent(currentValue, v -> 1);
             }
         }
         return integersFrequencies;
-    } 
-} 
+    }
+}
